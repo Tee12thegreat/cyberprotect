@@ -1,0 +1,2607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberProfitProtect System</title>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@1.6.5/dist/flowbite.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #5D5CDE;
+            --secondary-color: #2D2B55;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --info-color: #3B82F6;
+            --light-bg: #FFFFFF;
+            --dark-bg: #181818;
+            --light-text: #1F2937;
+            --dark-text: #F3F4F6;
+            --light-card: #F9FAFB;
+            --dark-card: #1F2937;
+            --light-border: #E5E7EB;
+            --dark-border: #374151;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: var(--dark-bg);
+                color: var(--dark-text);
+            }
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1.5rem 1rem;
+            transition: all 0.3s;
+            overflow-y: auto;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .sidebar {
+                background-color: #1E1E2D;
+                border-right: 1px solid var(--dark-border);
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.3s;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-radius: 0.375rem;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            padding: 1.5rem 2rem;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-badge {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: var(--light-card);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--light-border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .card {
+                background-color: var(--dark-card);
+                border: 1px solid var(--dark-border);
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .metric-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .metric-label {
+                color: #9CA3AF;
+            }
+        }
+
+        .metric-change {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.875rem;
+        }
+
+        .metric-change.positive {
+            color: var(--success-color);
+        }
+
+        .metric-change.negative {
+            color: var(--danger-color);
+        }
+
+        /* Chart and Table Containers */
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 1rem;
+        }
+
+        .grid-cols-1 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .grid-cols-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .grid-cols-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .grid-cols-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            background-color: #F3F4F6;
+            border-bottom: 1px solid var(--light-border);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            thead tr {
+                background-color: #374151;
+                border-bottom: 1px solid var(--dark-border);
+            }
+        }
+
+        th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #4B5563;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            th {
+                color: #D1D5DB;
+            }
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--light-border);
+            font-size: 0.875rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            td {
+                border-bottom: 1px solid var(--dark-border);
+            }
+        }
+
+        tbody tr:hover {
+            background-color: #F9FAFB;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            tbody tr:hover {
+                background-color: #1F2937;
+            }
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+            gap: 0.5rem;
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #4F4CBA;
+        }
+
+        .btn-secondary {
+            background-color: #E5E7EB;
+            color: #1F2937;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .btn-secondary {
+                background-color: #374151;
+                color: #F3F4F6;
+            }
+        }
+
+        .btn-secondary:hover {
+            background-color: #D1D5DB;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .btn-secondary:hover {
+                background-color: #4B5563;
+            }
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #DC2626;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.625rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border: 1px solid var(--light-border);
+            border-radius: 0.375rem;
+            transition: border-color 0.3s;
+            background-color: white;
+            color: var(--light-text);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .form-control {
+                background-color: #1F2937;
+                border-color: var(--dark-border);
+                color: var(--dark-text);
+            }
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.625rem 2.5rem 0.625rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border: 1px solid var(--light-border);
+            border-radius: 0.375rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+            transition: border-color 0.3s;
+            background-color: white;
+            color: var(--light-text);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .form-select {
+                background-color: #1F2937;
+                border-color: var(--dark-border);
+                color: var(--dark-text);
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D1D5DB'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            }
+        }
+
+        .form-select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: var(--light-bg);
+            border-radius: 0.5rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-20px);
+            transition: transform 0.3s;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .modal {
+                background-color: var(--dark-bg);
+                color: var(--dark-text);
+            }
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--light-border);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .modal-header {
+                border-bottom: 1px solid var(--dark-border);
+            }
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+            padding: 0;
+            color: #6B7280;
+            transition: color 0.3s;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .modal-close {
+                color: #9CA3AF;
+            }
+        }
+
+        .modal-close:hover {
+            color: #1F2937;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .modal-close:hover {
+                color: #F3F4F6;
+            }
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid var(--light-border);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .modal-footer {
+                border-top: 1px solid var(--dark-border);
+            }
+        }
+
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .grid-cols-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+            .grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+            .grid-cols-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Section-specific styles */
+        #dashboard-section,
+        #impact-analysis-section,
+        #scenario-section,
+        #monitoring-section,
+        #training-section,
+        #reporting-section,
+        #settings-section {
+            display: none;
+        }
+
+        #dashboard-section.active,
+        #impact-analysis-section.active,
+        #scenario-section.active,
+        #monitoring-section.active,
+        #training-section.active,
+        #reporting-section.active,
+        #settings-section.active {
+            display: block;
+        }
+
+        .threat-status-high {
+            color: var(--danger-color);
+        }
+
+        .threat-status-medium {
+            color: var(--warning-color);
+        }
+
+        .threat-status-low {
+            color: var(--success-color);
+        }
+
+        /* Training module styles */
+        .training-module {
+            border: 1px solid var(--light-border);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .training-module {
+                border-color: var(--dark-border);
+            }
+        }
+
+        .training-module:hover {
+            transform: translateY(-5px);
+        }
+
+        .module-header {
+            background-color: #F3F4F6;
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-border);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .module-header {
+                background-color: #1F2937;
+                border-bottom-color: var(--dark-border);
+            }
+        }
+
+        .module-content {
+            padding: 1rem;
+        }
+
+        .module-progress {
+            height: 5px;
+            background-color: #E5E7EB;
+            border-radius: 2.5px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .module-progress {
+                background-color: #374151;
+            }
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 2.5px;
+        }
+
+        /* Anomaly detection animation */
+        .anomaly-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--danger-color);
+            position: absolute;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+
+        /* Zimbabwe Flag Colors */
+        .zim-green {
+            color: #008751;
+        }
+
+        .zim-yellow {
+            color: #FFF200;
+        }
+
+        .zim-red {
+            color: #CE1126;
+        }
+
+        .zim-black {
+            color: #000000;
+        }
+
+        /* Loading spinner */
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--primary-color);
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Simulate network activity */
+        .network-activity {
+            position: relative;
+            width: 100%;
+            height: 120px;
+            background-color: #F3F4F6;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .network-activity {
+                background-color: #1F2937;
+            }
+        }
+
+        .activity-line {
+            position: absolute;
+            height: 2px;
+            background-color: var(--primary-color);
+            opacity: 0.7;
+            animation: moveRight 3s linear infinite;
+        }
+
+        @keyframes moveRight {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--light-border);
+            margin-bottom: 1.5rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .tabs {
+                border-bottom-color: var(--dark-border);
+            }
+        }
+
+        .tab {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: var(--primary-color);
+        }
+
+        .tab.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Alert box */
+        .alert {
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .alert-icon {
+            flex-shrink: 0;
+            margin-top: 0.125rem;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .alert-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success-color);
+        }
+
+        .alert-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .alert-info {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--info-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="avatar">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <span class="logo-text">CyberProfitProtect</span>
+            </div>
+            <nav>
+                <ul>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" data-section="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="impact-analysis">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Impact Analysis</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="scenario">
+                            <i class="fas fa-sitemap"></i>
+                            <span>Scenario Simulation</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="monitoring">
+                            <i class="fas fa-desktop"></i>
+                            <span>Monitoring</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="training">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Training</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="reporting">
+                            <i class="fas fa-flag"></i>
+                            <span>Incident Reporting</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title">CyberProfitProtect System</h1>
+                <div class="user-menu">
+                    <div class="notification-badge">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <div class="avatar">ZW</div>
+                        <span>ZSE Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="section active">
+                <div class="alert alert-warning">
+                    <div class="alert-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">High-Risk Threat Detected</div>
+                        <p>A potential ransomware attack was detected and automatically mitigated. See details in the monitoring section.</p>
+                    </div>
+                </div>
+
+                <div class="grid-cols-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Risk Score</h3>
+                            <div class="card-icon" style="background-color: var(--warning-color);">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="metric-value">65/100</div>
+                            <div class="metric-label">Current Security Risk Score</div>
+                            <div class="metric-change negative">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>5 points since last week</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Financial Impact</h3>
+                            <div class="card-icon" style="background-color: var(--danger-color);">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="metric-value">$285,000</div>
+                            <div class="metric-label">Potential Loss This Quarter</div>
+                            <div class="metric-change negative">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>12% increase</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Active Threats</h3>
+                            <div class="card-icon" style="background-color: var(--primary-color);">
+                                <i class="fas fa-bug"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="metric-value">17</div>
+                            <div class="metric-label">Active Threats Detected</div>
+                            <div class="metric-change negative">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>3 new threats</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Training Completion</h3>
+                            <div class="card-icon" style="background-color: var(--success-color);">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="metric-value">78%</div>
+                            <div class="metric-label">Employee Training Completion</div>
+                            <div class="metric-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>5% increase</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-cols-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Threat Distribution</h3>
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-download"></i>
+                                Export
+                            </button>
+                        </div>
+                        <div class="chart-container" id="threatDistributionChart"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Financial Impact Trend</h3>
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-download"></i>
+                                Export
+                            </button>
+                        </div>
+                        <div class="chart-container" id="financialImpactChart"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Security Incidents</h3>
+                        <button class="btn btn-sm btn-primary">
+                            <i class="fas fa-eye"></i>
+                            View All
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Incident</th>
+                                    <th>Type</th>
+                                    <th>Source</th>
+                                    <th>Detected At</th>
+                                    <th>Status</th>
+                                    <th>Financial Impact</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Suspicious login attempt</td>
+                                    <td>Authentication</td>
+                                    <td>External IP (196.223.x.x)</td>
+                                    <td>2023-08-10 09:23 AM</td>
+                                    <td><span class="status status-success">Resolved</span></td>
+                                    <td>$0</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary">Details</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Ransomware attempt</td>
+                                    <td>Malware</td>
+                                    <td>Email Attachment</td>
+                                    <td>2023-08-09 03:15 PM</td>
+                                    <td><span class="status status-warning">Investigating</span></td>
+                                    <td>$15,000 (est.)</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary">Details</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Data exfiltration attempt</td>
+                                    <td>Data Breach</td>
+                                    <td>Internal Network</td>
+                                    <td>2023-08-08 11:42 AM</td>
+                                    <td><span class="status status-danger">Critical</span></td>
+                                    <td>$75,000 (est.)</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary">Details</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Impact Analysis Section -->
+            <div id="impact-analysis-section" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Financial Impact Analysis</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="tabs">
+                            <div class="tab active" data-tab="direct-costs">Direct Costs</div>
+                            <div class="tab" data-tab="indirect-costs">Indirect Costs</div>
+                            <div class="tab" data-tab="regulatory-fines">Regulatory Fines</div>
+                            <div class="tab" data-tab="reputational-damage">Reputational Damage</div>
+                        </div>
+
+                        <div class="tab-content active" id="direct-costs">
+                            <div class="grid-cols-2">
+                                <div class="form-group">
+                                    <label class="form-label">Incident Type</label>
+                                    <select class="form-select" id="incident-type">
+                                        <option value="ransomware">Ransomware Attack</option>
+                                        <option value="data-breach">Data Breach</option>
+                                        <option value="ddos">DDoS Attack</option>
+                                        <option value="insider-threat">Insider Threat</option>
+                                        <option value="phishing">Phishing Campaign</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Severity Level</label>
+                                    <select class="form-select" id="severity-level">
+                                        <option value="low">Low Impact</option>
+                                        <option value="medium">Medium Impact</option>
+                                        <option value="high">High Impact</option>
+                                        <option value="critical">Critical Impact</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid-cols-2">
+                                <div class="form-group">
+                                    <label class="form-label">Recovery Time (days)</label>
+                                    <input type="number" class="form-control" id="recovery-days" value="5" min="1" max="365">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Daily Revenue (USD)</label>
+                                    <input type="number" class="form-control" id="daily-revenue" value="45000" min="0">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-primary" id="calculate-impact">
+                                    <i class="fas fa-calculator"></i>
+                                    Calculate Impact
+                                </button>
+                            </div>
+
+                            <div class="chart-container" id="directCostsChart"></div>
+
+                            <div class="grid-cols-3" id="impact-results" style="margin-top: 1.5rem;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Business Disruption</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="metric-value">$225,000</div>
+                                        <div class="metric-label">Lost Revenue</div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Recovery Costs</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="metric-value">$75,000</div>
+                                        <div class="metric-label">IT & Operations</div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Total Financial Impact</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="metric-value">$300,000</div>
+                                        <div class="metric-label">Estimated Loss</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="indirect-costs">
+                            <div class="alert alert-info">
+                                <div class="alert-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Indirect Cost Analysis</div>
+                                    <p>This analysis includes employee productivity loss, customer churn, and long-term brand impact specific to the Zimbabwean market.</p>
+                                </div>
+                            </div>
+                            <div class="chart-container" id="indirectCostsChart"></div>
+                        </div>
+
+                        <div class="tab-content" id="regulatory-fines">
+                            <div class="alert alert-info">
+                                <div class="alert-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Zimbabwe Regulatory Framework</div>
+                                    <p>Analysis based on Zimbabwe's Data Protection Act, Securities and Exchange Commission requirements, and ZSE listing rules.</p>
+                                </div>
+                            </div>
+                            <div class="chart-container" id="regulatoryFinesChart"></div>
+                        </div>
+
+                        <div class="tab-content" id="reputational-damage">
+                            <div class="alert alert-info">
+                                <div class="alert-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Reputational Damage Analysis</div>
+                                    <p>Impact on shareholder value, market confidence, and business relationships in the Zimbabwe Stock Exchange context.</p>
+                                </div>
+                            </div>
+                            <div class="chart-container" id="reputationalDamageChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenario Simulation Section -->
+            <div id="scenario-section" class="section">
+                <div class="grid-cols-1">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Scenario Simulation</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="grid-cols-3">
+                                <div class="form-group">
+                                    <label class="form-label">Scenario Template</label>
+                                    <select class="form-select" id="scenario-template">
+                                        <option value="ransomware">Ransomware Attack</option>
+                                        <option value="data-breach">Data Breach</option>
+                                        <option value="insider-threat">Insider Threat</option>
+                                        <option value="supply-chain">Supply Chain Attack</option>
+                                        <option value="custom">Custom Scenario</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Company Size</label>
+                                    <select class="form-select" id="company-size">
+                                        <option value="small">Small (&lt;50 employees)</option>
+                                        <option value="medium" selected>Medium (50-250 employees)</option>
+                                        <option value="large">Large (&gt;250 employees)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Industry Sector</label>
+                                    <select class="form-select" id="industry-sector">
+                                        <option value="banking">Banking & Finance</option>
+                                        <option value="mining">Mining</option>
+                                        <option value="telecom">Telecommunications</option>
+                                        <option value="retail">Retail & Consumer</option>
+                                        <option value="manufacturing">Manufacturing</option>
+                                        <option value="agriculture">Agriculture</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Scenario Description</label>
+                                <textarea class="form-control" id="scenario-description" rows="4" placeholder="Describe the scenario in detail or use a template...">A ransomware attack targeting the company's financial systems just before quarterly reporting period. All financial data is encrypted and attackers demand $500,000 in cryptocurrency.</textarea>
+                            </div>
+
+                            <div class="grid-cols-2">
+                                <div class="form-group">
+                                    <label class="form-label">Security Controls in Place</label>
+                                    <div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="control-endpoint" checked>
+                                            <label class="form-check-label" for="control-endpoint">Endpoint Protection</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="control-backup" checked>
+                                            <label class="form-check-label" for="control-backup">Regular Backups</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="control-firewall" checked>
+                                            <label class="form-check-label" for="control-firewall">Next-Gen Firewall</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="control-encryption">
+                                            <label class="form-check-label" for="control-encryption">Data Encryption</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="control-mfa">
+                                            <label class="form-check-label" for="control-mfa">Multi-Factor Authentication</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Response Capabilities</label>
+                                    <div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="response-plan" checked>
+                                            <label class="form-check-label" for="response-plan">Incident Response Plan</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="response-team" checked>
+                                            <label class="form-check-label" for="response-team">Dedicated Security Team</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="response-insurance">
+                                            <label class="form-check-label" for="response-insurance">Cyber Insurance</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="response-drills">
+                                            <label class="form-check-label" for="response-drills">Regular Security Drills</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="response-thirdparty">
+                                            <label class="form-check-label" for="response-thirdparty">Third-party Response Partner</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-primary" id="run-simulation">
+                                    <i class="fas fa-play"></i>
+                                    Run Simulation
+                                </button>
+                                <button class="btn btn-secondary" id="save-scenario">
+                                    <i class="fas fa-save"></i>
+                                    Save Scenario
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="simulation-results" style="display: none;">
+                        <div class="card-header">
+                            <h3 class="card-title">Simulation Results</h3>
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-download"></i>
+                                Export Report
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div class="alert alert-warning">
+                                <div class="alert-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <div class="alert-title">High Financial Risk</div>
+                                    <p>This scenario indicates a potential financial impact of $350,000 - $450,000, representing approximately 7.5% of annual revenue.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid-cols-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Financial Impact</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="metric-value">$425,000</div>
+                                        <div class="metric-label">Estimated Total Loss</div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Downtime</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="metric-value">3-5 days</div>
+                                        <div class="metric-label">Estimated Recovery Time</div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Risk Score</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="metric-value">72/100</div>
+                                        <div class="metric-label">Overall Risk Rating</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="chart-container" id="simulationResultsChart"></div>
+
+                            <h4 style="margin: 1.5rem 0 1rem 0;">Recommended Preventive Measures</h4>
+                            <ul style="list-style-type: none; padding: 0;">
+                                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--light-border); display: flex; align-items: center; gap: 0.75rem;">
+                                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                                    <span>Implement Multi-Factor Authentication for all financial systems access</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--light-border); display: flex; align-items: center; gap: 0.75rem;">
+                                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                                    <span>Enhance backup strategy with air-gapped offsite backups</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--light-border); display: flex; align-items: center; gap: 0.75rem;">
+                                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                                    <span>Conduct quarterly ransomware tabletop exercises with financial team</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--light-border); display: flex; align-items: center; gap: 0.75rem;">
+                                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                                    <span>Implement network segmentation for financial systems</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.75rem;">
+                                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                                    <span>Acquire cyber insurance coverage with ransomware protection</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitoring Section -->
+            <div id="monitoring-section" class="section">
+                <div class="grid-cols-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Network Traffic</h3>
+                            <span class="status status-success">Normal</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="network-activity" id="network-traffic-visual">
+                                <div class="activity-line" style="top: 20%; width: 40%; animation-delay: 0s;"></div>
+                                <div class="activity-line" style="top: 40%; width: 60%; animation-delay: 0.5s;"></div>
+                                <div class="activity-line" style="top: 60%; width: 30%; animation-delay: 1s;"></div>
+                                <div class="activity-line" style="top: 80%; width: 50%; animation-delay: 1.5s;"></div>
+                            </div>
+                            <div style="margin-top: 1rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Current Traffic</span>
+                                    <span>5.2 GB/hr</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Anomaly Score</span>
+                                    <span>12/100</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Authentication Events</h3>
+                            <span class="status status-warning">Unusual Activity</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="network-activity" id="auth-events-visual" style="position: relative;">
+                                <div class="activity-line" style="top: 30%; width: 70%; animation-delay: 0.2s;"></div>
+                                <div class="activity-line" style="top: 50%; width: 45%; animation-delay: 0.7s;"></div>
+                                <div class="activity-line" style="top: 70%; width: 60%; animation-delay: 1.3s;"></div>
+                                <div class="anomaly-dot" style="top: 35%; left: 75%;"></div>
+                                <div class="anomaly-dot" style="top: 60%; left: 40%;"></div>
+                            </div>
+                            <div style="margin-top: 1rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Failed Logins</span>
+                                    <span class="threat-status-medium">27 (↑12)</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Anomaly Score</span>
+                                    <span>68/100</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">File System Activity</h3>
+                            <span class="status status-danger">Critical</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="network-activity" id="filesystem-activity-visual">
+                                <div class="activity-line" style="top: 25%; width: 80%; animation-delay: 0.3s;"></div>
+                                <div class="activity-line" style="top: 45%; width: 65%; animation-delay: 0.8s;"></div>
+                                <div class="activity-line" style="top: 65%; width: 70%; animation-delay: 1.4s;"></div>
+                                <div class="anomaly-dot" style="top: 25%; left: 30%;"></div>
+                                <div class="anomaly-dot" style="top: 45%; left: 60%;"></div>
+                                <div class="anomaly-dot" style="top: 65%; left: 75%;"></div>
+                            </div>
+                            <div style="margin-top: 1rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Mass File Operations</span>
+                                    <span class="threat-status-high">532 files</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Anomaly Score</span>
+                                    <span>89/100</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Real-time Anomaly Detection</h3>
+                        <button class="btn btn-sm btn-secondary" id="refresh-anomalies">
+                            <i class="fas fa-sync"></i>
+                            Refresh
+                        </button>
+                    </div>
+                    <div class="card-content">
+                        <div class="chart-container" id="anomalyDetectionChart"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Active Threats</h3>
+                        <div>
+                            <button class="btn btn-sm btn-danger" id="mitigate-all">
+                                <i class="fas fa-shield-alt"></i>
+                                Mitigate All
+                            </button>
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-filter"></i>
+                                Filter
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Threat</th>
+                                    <th>Source</th>
+                                    <th>Target</th>
+                                    <th>Risk Level</th>
+                                    <th>Detection Time</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Ransomware (Locky variant)</td>
+                                    <td>Email Attachment</td>
+                                    <td>Financial Department</td>
+                                    <td><span class="threat-status-high">Critical</span></td>
+                                    <td>10 minutes ago</td>
+                                    <td><span class="status status-danger">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger">Mitigate</button>
+                                        <button class="btn btn-sm btn-secondary">Details</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Brute Force Attack</td>
+                                    <td>External IP (41.60.x.x)</td>
+                                    <td>Admin Portal</td>
+                                    <td><span class="threat-status-medium">Medium</span></td>
+                                    <td>42 minutes ago</td>
+                                    <td><span class="status status-warning">Contained</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger">Mitigate</button>
+                                        <button class="btn btn-sm btn-secondary">Details</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Suspicious Data Transfer</td>
+                                    <td>Internal (192.168.1.45)</td>
+                                    <td>External Storage</td>
+                                    <td><span class="threat-status-medium">Medium</span></td>
+                                    <td>1 hour ago</td>
+                                    <td><span class="status status-warning">Investigating</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger">Mitigate</button>
+                                        <button class="btn btn-sm btn-secondary">Details</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Training Section -->
+            <div id="training-section" class="section">
+                <div class="grid-cols-1">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Training Dashboard</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="grid-cols-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Completion Rate</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="metric-value">78%</div>
+                                        <div class="metric-label">Overall Completion</div>
+                                        <div class="module-progress">
+                                            <div class="progress-bar" style="width: 78%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Average Score</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="metric-value">83%</div>
+                                        <div class="metric-label">All Assessments</div>
+                                        <div class="module-progress">
+                                            <div class="progress-bar" style="width: 83%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Department Progress</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="metric-value">Finance: 92%</div>
+                                        <div class="metric-label">Highest Performing</div>
+                                        <div class="module-progress">
+                                            <div class="progress-bar" style="width: 92%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 style="margin: 1.5rem 0 1rem 0;">Training Modules</h4>
+
+                            <div class="grid-cols-2">
+                                <div class="training-module">
+                                    <div class="module-header">
+                                        <h5>Phishing Awareness</h5>
+                                    </div>
+                                    <div class="module-content">
+                                        <p>Learn to identify and avoid phishing attempts targeting financial data.</p>
+                                        <div style="display: flex; justify-content: space-between; margin-top: 0.75rem;">
+                                            <span>Completion: 86%</span>
+                                            <button class="btn btn-sm btn-primary">Start Module</button>
+                                        </div>
+                                        <div class="module-progress">
+                                            <div class="progress-bar" style="width: 86%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="training-module">
+                                    <div class="module-header">
+                                        <h5>Secure Data Handling</h5>
+                                    </div>
+                                    <div class="module-content">
+                                        <p>Protocols for handling sensitive financial information securely.</p>
+                                        <div style="display: flex; justify-content: space-between; margin-top: 0.75rem;">
+                                            <span>Completion: 72%</span>
+                                            <button class="btn btn-sm btn-primary">Start Module</button>
+                                        </div>
+                                        <div class="module-progress">
+                                            <div class="progress-bar" style="width: 72%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="training-module">
+                                    <div class="module-header">
+                                        <h5>Incident Response</h5>
+                                    </div>
+                                    <div class="module-content">
+                                        <p>How to recognize and report potential security incidents promptly.</p>
+                                        <div style="display: flex; justify-content: space-between; margin-top: 0.75rem;">
+                                            <span>Completion: 65%</span>
+                                            <button class="btn btn-sm btn-primary">Start Module</button>
+                                        </div>
+                                        <div class="module-progress">
+                                            <div class="progress-bar" style="width: 65%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="training-module">
+                                    <div class="module-header">
+                                        <h5>Zimbabwe Cybersecurity Law</h5>
+                                    </div>
+                                    <div class="module-content">
+                                        <p>Understanding local regulatory requirements for ZSE-listed companies.</p>
+                                        <div style="display: flex; justify-content: space-between; margin-top: 0.75rem;">
+                                            <span>Completion: 54%</span>
+                                            <button class="btn btn-sm btn-primary">Start Module</button>
+                                        </div>
+                                        <div class="module-progress">
+                                            <div class="progress-bar" style="width: 54%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 style="margin: 1.5rem 0 1rem 0;">Simulated Phishing Campaign Results</h4>
+                            <div class="chart-container" id="phishingResultsChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reporting Section -->
+            <div id="reporting-section" class="section">
+                <div class="grid-cols-1">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Report a Security Incident</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="form-group">
+                                <label class="form-label">Incident Type</label>
+                                <select class="form-select" id="incident-type-report">
+                                    <option value="">Select incident type...</option>
+                                    <option value="phishing">Suspicious Email/Phishing</option>
+                                    <option value="malware">Suspected Malware</option>
+                                    <option value="unauthorized">Unauthorized Access</option>
+                                    <option value="data-loss">Data Loss/Leakage</option>
+                                    <option value="physical">Physical Security Breach</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Urgency Level</label>
+                                <select class="form-select" id="urgency-level">
+                                    <option value="low">Low - No immediate impact</option>
+                                    <option value="medium">Medium - Potential business impact</option>
+                                    <option value="high">High - Current business impact</option>
+                                    <option value="critical">Critical - Severe business impact</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" id="incident-description" rows="5" placeholder="Describe what happened, when you noticed it, and any other relevant details..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Affected Systems/Data</label>
+                                <input type="text" class="form-control" id="affected-systems" placeholder="Which systems, applications, or data are affected?">
+                            </div>
+
+                            <div class="grid-cols-2">
+                                <div class="form-group">
+                                    <label class="form-label">Department</label>
+                                    <select class="form-select" id="department">
+                                        <option value="">Select department...</option>
+                                        <option value="finance">Finance</option>
+                                        <option value="hr">Human Resources</option>
+                                        <option value="it">IT</option>
+                                        <option value="operations">Operations</option>
+                                        <option value="sales">Sales</option>
+                                        <option value="management">Management</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Contact Information</label>
+                                    <input type="text" class="form-control" id="contact-info" placeholder="Your name and contact details">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-primary" id="submit-report">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Submit Report
+                                </button>
+                                <button class="btn btn-secondary" id="save-draft">
+                                    <i class="fas fa-save"></i>
+                                    Save as Draft
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Recent Reports</h3>
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-filter"></i>
+                                Filter
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Type</th>
+                                        <th>Reported By</th>
+                                        <th>Department</th>
+                                        <th>Submitted</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#INC-2023-042</td>
+                                        <td>Suspicious Email</td>
+                                        <td>T. Moyo</td>
+                                        <td>Finance</td>
+                                        <td>2023-08-10 09:15 AM</td>
+                                        <td><span class="status status-warning">Investigating</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#INC-2023-041</td>
+                                        <td>Suspected Malware</td>
+                                        <td>C. Ncube</td>
+                                        <td>Operations</td>
+                                        <td>2023-08-09 16:22 PM</td>
+                                        <td><span class="status status-success">Resolved</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#INC-2023-040</td>
+                                        <td>Unauthorized Access</td>
+                                        <td>R. Dhliwayo</td>
+                                        <td>IT</td>
+                                        <td>2023-08-09 11:08 AM</td>
+                                        <td><span class="status status-danger">Escalated</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary">View</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings-section" class="section">
+                <div class="grid-cols-1">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">System Settings</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="tabs">
+                                <div class="tab active" data-tab="notifications">Notifications</div>
+                                <div class="tab" data-tab="security">Security Controls</div>
+                                <div class="tab" data-tab="api">API Integration</div>
+                                <div class="tab" data-tab="backup">Backup & Recovery</div>
+                            </div>
+
+                            <div class="tab-content active" id="notifications">
+                                <h4 style="margin-bottom: 1rem;">Notification Settings</h4>
+                                <div class="form-group">
+                                    <label class="form-label">Email Notifications</label>
+                                    <div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="notify-incidents" checked>
+                                            <label class="form-check-label" for="notify-incidents">Security Incidents</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="notify-threats" checked>
+                                            <label class="form-check-label" for="notify-threats">New Threats</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="notify-reports" checked>
+                                            <label class="form-check-label" for="notify-reports">Incident Reports</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="notify-training">
+                                            <label class="form-check-label" for="notify-training">Training Updates</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="notify-system">
+                                            <label class="form-check-label" for="notify-system">System Updates</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">SMS Notifications</label>
+                                    <div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="sms-critical" checked>
+                                            <label class="form-check-label" for="sms-critical">Critical Incidents Only</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Notification Recipients</label>
+                                    <select class="form-select" id="notification-group">
+                                        <option value="security-team">Security Team Only</option>
+                                        <option value="department-heads">Department Heads</option>
+                                        <option value="all-managers">All Managers</option>
+                                        <option value="custom">Custom Group</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-primary" id="save-notifications">
+                                        <i class="fas fa-save"></i>
+                                        Save Settings
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="tab-content" id="security">
+                                <h4 style="margin-bottom: 1rem;">Security Control Settings</h4>
+                                <div class="form-group">
+                                    <label class="form-label">Automatic Mitigation</label>
+                                    <div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="auto-phishing" checked>
+                                            <label class="form-check-label" for="auto-phishing">Block Phishing Attempts</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="auto-malware" checked>
+                                            <label class="form-check-label" for="auto-malware">Quarantine Malware</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="auto-bruteforce" checked>
+                                            <label class="form-check-label" for="auto-bruteforce">Block Brute Force Attempts</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="auto-dataexfil">
+                                            <label class="form-check-label" for="auto-dataexfil">Prevent Data Exfiltration</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Risk Threshold for Automatic Actions</label>
+                                    <select class="form-select" id="risk-threshold">
+                                        <option value="low">Low (Most Sensitive)</option>
+                                        <option value="medium" selected>Medium</option>
+                                        <option value="high">High</option>
+                                        <option value="critical">Critical Only (Least Sensitive)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-primary" id="save-security">
+                                        <i class="fas fa-save"></i>
+                                        Save Settings
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="tab-content" id="api">
+                                <h4 style="margin-bottom: 1rem;">API Integration Settings</h4>
+                                <div class="alert alert-info">
+                                    <div class="alert-icon">
+                                        <i class="fas fa-info-circle"></i>
+                                    </div>
+                                    <div class="alert-content">
+                                        <div class="alert-title">Integration with Zimbabwe Financial Systems</div>
+                                        <p>Configure connections to ZSE trading systems and financial reporting platforms.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">ZSE Trading Platform Integration</label>
+                                    <select class="form-select" id="zse-integration">
+                                        <option value="disabled">Disabled</option>
+                                        <option value="read-only" selected>Read-Only Access</option>
+                                        <option value="full">Full Integration</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">API Authentication</label>
+                                    <select class="form-select" id="api-auth">
+                                        <option value="api-key">API Key</option>
+                                        <option value="oauth2" selected>OAuth 2.0</option>
+                                        <option value="jwt">JWT</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-primary" id="save-api">
+                                        <i class="fas fa-save"></i>
+                                        Save Settings
+                                    </button>
+                                    <button class="btn btn-secondary" id="test-api">
+                                        <i class="fas fa-vial"></i>
+                                        Test Connection
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="tab-content" id="backup">
+                                <h4 style="margin-bottom: 1rem;">Backup & Recovery Settings</h4>
+                                <div class="form-group">
+                                    <label class="form-label">Backup Schedule</label>
+                                    <select class="form-select" id="backup-schedule">
+                                        <option value="daily" selected>Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Retention Policy</label>
+                                    <select class="form-select" id="retention-policy">
+                                        <option value="30days">30 Days</option>
+                                        <option value="90days" selected>90 Days</option>
+                                        <option value="1year">1 Year</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-primary" id="save-backup">
+                                        <i class="fas fa-save"></i>
+                                        Save Settings
+                                    </button>
+                                    <button class="btn btn-secondary" id="run-backup">
+                                        <i class="fas fa-database"></i>
+                                        Run Backup Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="success-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Success</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--success-color);"></i>
+                </div>
+                <p id="success-message" style="text-align: center;">Operation completed successfully!</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary modal-close-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simulation Loading Modal -->
+    <div class="modal-overlay" id="simulation-loading-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Running Simulation</h3>
+            </div>
+            <div class="modal-body" style="text-align: center; padding: 2rem;">
+                <div style="margin-bottom: 1.5rem;">
+                    <span class="loader"></span>
+                </div>
+                <p>Processing scenario simulation...</p>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem; color: #6B7280;">This may take a few moments</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation handling
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links and sections
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Show corresponding section
+                    const sectionId = this.getAttribute('data-section') + '-section';
+                    document.getElementById(sectionId).classList.add('active');
+                });
+            });
+
+            // Tab functionality
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabContainer = this.closest('.tabs').parentElement;
+                    const tabName = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and content in this container
+                    tabContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tabContainer.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    tabContainer.querySelector(`#${tabName}`).classList.add('active');
+                });
+            });
+
+            // Modal functionality
+            const modalOverlays = document.querySelectorAll('.modal-overlay');
+            const modalCloseBtns = document.querySelectorAll('.modal-close, .modal-close-btn');
+
+            modalCloseBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const modal = this.closest('.modal-overlay');
+                    modal.classList.remove('active');
+                });
+            });
+
+            // Scenario simulation
+            const runSimulationBtn = document.getElementById('run-simulation');
+            const simulationResults = document.getElementById('simulation-results');
+            const simulationLoadingModal = document.getElementById('simulation-loading-modal');
+
+            if (runSimulationBtn) {
+                runSimulationBtn.addEventListener('click', function() {
+                    // Show loading modal
+                    simulationLoadingModal.classList.add('active');
+                    
+                    // Simulate processing time
+                    setTimeout(() => {
+                        // Hide loading modal
+                        simulationLoadingModal.classList.remove('active');
+                        
+                        // Show results
+                        simulationResults.style.display = 'block';
+                        
+                        // Scroll to results
+                        simulationResults.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Update the simulation results chart
+                        createSimulationResultsChart();
+                    }, 2000);
+                });
+            }
+
+            // Form submissions
+            const calculateImpactBtn = document.getElementById('calculate-impact');
+            if (calculateImpactBtn) {
+                calculateImpactBtn.addEventListener('click', function() {
+                    // Update charts and metrics based on form inputs
+                    createDirectCostsChart();
+                });
+            }
+
+            const submitReportBtn = document.getElementById('submit-report');
+            const successModal = document.getElementById('success-modal');
+            const successMessage = document.getElementById('success-message');
+
+            if (submitReportBtn) {
+                submitReportBtn.addEventListener('click', function() {
+                    // Validation would go here in a real app
+                    
+                    // Show success message
+                    successMessage.textContent = 'Incident report submitted successfully!';
+                    successModal.classList.add('active');
+                    
+                    // Clear form
+                    document.getElementById('incident-description').value = '';
+                    document.getElementById('affected-systems').value = '';
+                    document.getElementById('contact-info').value = '';
+                });
+            }
+
+            // Settings save buttons
+            const saveButtons = document.querySelectorAll('#save-notifications, #save-security, #save-api, #save-backup');
+            saveButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Show success message
+                    successMessage.textContent = 'Settings saved successfully!';
+                    successModal.classList.add('active');
+                });
+            });
+
+            // Create initial charts
+            createThreatDistributionChart();
+            createFinancialImpactChart();
+            createAnomalyDetectionChart();
+            createPhishingResultsChart();
+            createDirectCostsChart();
+            createIndirectCostsChart();
+            createRegulatoryFinesChart();
+            createReputationalDamageChart();
+        });
+
+        // Chart creation functions
+        function createThreatDistributionChart() {
+            const ctx = document.getElementById('threatDistributionChart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Ransomware', 'Phishing', 'Data Breach', 'Insider Threat', 'DDoS'],
+                    datasets: [{
+                        data: [35, 25, 15, 15, 10],
+                        backgroundColor: [
+                            '#EF4444', // Red
+                            '#F59E0B', // Amber
+                            '#3B82F6', // Blue
+                            '#8B5CF6', // Purple
+                            '#10B981', // Green
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        function createFinancialImpactChart() {
+            const ctx = document.getElementById('financialImpactChart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    datasets: [{
+                        label: 'Potential Financial Impact',
+                        data: [120000, 135000, 150000, 175000, 190000, 210000, 250000, 285000],
+                        borderColor: '#EF4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createAnomalyDetectionChart() {
+            const ctx = document.getElementById('anomalyDetectionChart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
+                    datasets: [{
+                        label: 'Network Traffic',
+                        data: [42, 38, 35, 37, 49, 72, 78, 76, 82, 80, 65, 55],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Authentication Events',
+                        data: [20, 15, 10, 12, 25, 68, 75, 70, 65, 58, 40, 25],
+                        borderColor: '#8B5CF6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Anomaly Score',
+                        data: [15, 10, 12, 14, 18, 35, 42, 65, 85, 68, 45, 30],
+                        borderColor: '#EF4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderDash: [5, 5]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPhishingResultsChart() {
+            const ctx = document.getElementById('phishingResultsChart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Finance', 'HR', 'IT', 'Operations', 'Sales', 'Management'],
+                    datasets: [{
+                        label: 'Clicked Phishing Link (%)',
+                        data: [8, 12, 5, 15, 18, 7],
+                        backgroundColor: '#EF4444'
+                    }, {
+                        label: 'Reported Suspicious Email (%)',
+                        data: [92, 88, 95, 85, 75, 93],
+                        backgroundColor: '#10B981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createDirectCostsChart() {
+            const ctx = document.getElementById('directCostsChart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['System Recovery', 'Data Recovery', 'Business Interruption', 'Investigation', 'Legal Costs'],
+                    datasets: [{
+                        label: 'Cost (USD)',
+                        data: [45000, 30000, 225000, 35000, 40000],
+                        backgroundColor: '#5D5CDE'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': $' + context.raw.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createIndirectCostsChart() {
+            const ctx = document.getElementById('indirectCostsChart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Customer Churn', 'Productivity Loss', 'Brand Damage', 'Increased Insurance', 'Opportunity Cost'],
+                    datasets: [{
+                        label: 'Cost (USD)',
+                        data: [125000, 75000, 180000, 50000, 85000],
+                        backgroundColor: '#F59E0B'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createRegulatoryFinesChart() {
+            const ctx = document.getElementById('regulatoryFinesChart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Data Protection Act', 'ZSE Listing Rules', 'SEC Requirements', 'Banking Regulations', 'Industry Standards'],
+                    datasets: [{
+                        label: 'Maximum Potential Fine (USD)',
+                        data: [100000, 75000, 150000, 200000, 50000],
+                        backgroundColor: '#EF4444'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createReputationalDamageChart() {
+            const ctx = document.getElementById('reputationalDamageChart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Initial', 'Week 1', 'Month 1', 'Month 3', 'Month 6', 'Year 1'],
+                    datasets: [{
+                        label: 'Stock Value Impact (%)',
+                        data: [-15, -12, -8, -5, -2, 0],
+                        borderColor: '#EF4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Customer Trust (%)',
+                        data: [-25, -20, -15, -10, -5, -2],
+                        borderColor: '#F59E0B',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Partner Confidence (%)',
+                        data: [-18, -15, -10, -8, -3, -1],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createSimulationResultsChart() {
+            const ctx = document.getElementById('simulationResultsChart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Direct Costs', 'Business Disruption', 'Recovery', 'Reputation Damage', 'Regulatory Fines'],
+                    datasets: [{
+                        label: 'Without Controls (USD)',
+                        data: [150000, 225000, 120000, 180000, 100000],
+                        backgroundColor: '#EF4444'
+                    }, {
+                        label: 'With Current Controls (USD)',
+                        data: [85000, 175000, 75000, 90000, 0],
+                        backgroundColor: '#F59E0B'
+                    }, {
+                        label: 'With Recommended Controls (USD)',
+                        data: [25000, 60000, 30000, 35000, 0],
+                        backgroundColor: '#10B981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
