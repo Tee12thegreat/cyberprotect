@@ -53,6 +53,7 @@
             box-shadow: 2px 0 16px rgba(26,82,118,0.07);
             backdrop-filter: var(--sidebar-blur);
             border-right: 1px solid #e5e7eb;
+            z-index: 1000;
         }
 
         .logo {
@@ -229,6 +230,13 @@
         }
 
         /* Status indicators */
+        .status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
         .status-success {
             background: rgba(40, 180, 99, 0.13);
             color: var(--success-color);
@@ -299,6 +307,30 @@
             color: var(--warning-color);
         }
 
+        /* Tables */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-border);
+        }
+        .table th {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        .cve-badge {
+            display: inline-block;
+            background: #f3f4f6;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            margin-right: 0.3rem;
+            color: var(--primary-color);
+        }
+
         /* Zimbabwe theme elements */
         .zim-theme {
             background: linear-gradient(to right, 
@@ -315,6 +347,83 @@
             box-shadow: 0 1px 4px #0001;
         }
 
+        /* Forms */
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        .form-control, .form-select {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--light-border);
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .form-check-input {
+            margin-right: 0.5rem;
+        }
+
+        /* Progress bars */
+        .progress {
+            background-color: #f3f4f6;
+            border-radius: 0.25rem;
+            height: 0.5rem;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+        }
+        .progress-container {
+            margin-bottom: 1rem;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Training modules */
+        .training-module {
+            padding: 1rem;
+            border: 1px solid var(--light-border);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .module-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        /* Checklist items */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--light-border);
+        }
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+        .checklist-status {
+            margin-left: auto;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
         /* Responsive */
         @media (max-width: 992px) {
             .grid-cols-3 {
@@ -327,19 +436,28 @@
             }
             .sidebar {
                 display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 250px;
+                height: 100%;
+                z-index: 1000;
+            }
+            .sidebar.active {
+                display: block;
             }
             .grid-cols-2, .grid-cols-3 {
                 grid-template-columns: 1fr;
             }
             .main-content {
-                padding: 1.2rem 0.7rem;
+                padding: 1.2rem;
             }
         }
-        /* ... (other unchanged styles) ... */
-         /* Mobile Menu Button */
+
+        /* Mobile Menu Button */
         .mobile-menu-button {
             display: none;
-            position: absolute;
+            position: fixed;
             top: 1rem;
             left: 1rem;
             background: none;
@@ -347,38 +465,31 @@
             color: var(--primary-color);
             font-size: 1.5rem;
             cursor: pointer;
+            z-index: 1100;
         }
 
-        /* Show mobile menu button on small screens */
         @media (max-width: 768px) {
             .mobile-menu-button {
                 display: block;
             }
-
-            .sidebar {
-                display: none; /* Hide sidebar by default on small screens */
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 250px;
-                height: 100%;
-                z-index: 1000;
-                overflow-y: auto;
-            }
-
-            .sidebar.active {
-                display: block; /* Show sidebar when active */
-            }
-
             .main-content {
-                padding-top: 5rem; /* Add padding to main content to account for mobile menu button */
+                padding-top: 4rem;
             }
         }
+
+        /* Sections */
         .section {
             display: none;
         }
         .section.active {
             display: block;
+        }
+
+        /* Chart containers */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
         }
     </style>
 </head>
@@ -388,6 +499,7 @@
         <button class="mobile-menu-button">
             <i class="fas fa-bars"></i>
         </button>
+        
         <!-- Sidebar with Zimbabwe theme -->
         <div class="sidebar">
             <div class="logo">
@@ -395,7 +507,7 @@
                 <span class="logo-text">CyberShield ZW</span>
             </div>
             <nav>
-                <ul>
+                <ul style="list-style: none; padding: 0;">
                     <li class="nav-item">
                         <a href="#" class="nav-link active" data-section="dashboard">
                             <i class="fas fa-tachometer-alt nav-icon"></i>
@@ -465,7 +577,7 @@
                             <h3 class="card-title">Network Status</h3>
                         </div>
                         <div>
-                            <span class="status-success">All systems operational</span>
+                            <span class="status status-success">All systems operational</span>
                         </div>
                     </div>
                     <div class="card">
@@ -473,7 +585,7 @@
                             <h3 class="card-title">Threats Detected</h3>
                         </div>
                         <div>
-                            <span class="status-danger">2 High, 5 Medium</span>
+                            <span class="status status-danger">2 High, 5 Medium</span>
                         </div>
                     </div>
                     <div class="card">
@@ -481,11 +593,10 @@
                             <h3 class="card-title">Compliance</h3>
                         </div>
                         <div>
-                            <span class="status-success">Compliant</span>
+                            <span class="status status-success">Compliant</span>
                         </div>
                     </div>
                 </div>
-            </div>
 
                 <div class="card">
                     <div class="card-header">
@@ -790,7 +901,9 @@
                             <i class="fas fa-shield-alt"></i>
                         </div>
                         <div class="card-content">
-                            <div class="chart-container" id="phishingChart"></div>
+                            <div class="chart-container">
+                                <canvas id="phishingChart"></canvas>
+                            </div>
                             <div class="mt-2 text-center">
                                 <small class="text-muted">Last test conducted: Today 09:00</small>
                             </div>
@@ -986,10 +1099,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script>
-              document.querySelector('.mobile-menu-button').addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.toggle('active');
-        });
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            document.querySelector('.mobile-menu-button').addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
+
             // Navigation handling
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('.section');
@@ -998,6 +1113,12 @@
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     
+                    // Close mobile menu if open
+                    if (window.innerWidth <= 768) {
+                        document.querySelector('.sidebar').classList.remove('active');
+                    }
+                    
+                    // Update active states
                     navLinks.forEach(item => item.classList.remove('active'));
                     sections.forEach(section => section.classList.remove('active'));
                     
@@ -1009,106 +1130,8 @@
             });
 
             // Create charts
-            createThreatLandscapeChart();
-            createVulnerabilityChart();
-            createSystemHealthChart();
             createPhishingChart();
         });
-
-        function createThreatLandscapeChart() {
-            const ctx = document.getElementById('threatLandscapeChart');
-            if (!ctx) return;
-
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Malware', 'Phishing', 'Unauthorized Access', 'Data Exfiltration', 'Insider Threats'],
-                    datasets: [{
-                        data: [25, 35, 15, 15, 10],
-                        backgroundColor: [
-                            '#e74c3c',
-                            '#f39c12',
-                            '#3498db',
-                            '#9b59b6',
-                            '#2ecc71'
-                        ],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            position: 'right'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.label}: ${context.raw}%`;
-                                }
-                            }
-                        }
-                    },
-                    cutout: '70%'
-                }
-            });
-        }
-
-        function createVulnerabilityChart() {
-            const ctx = document.getElementById('vulnerabilityChart');
-            if (!ctx) return;
-
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Critical', 'High', 'Medium', 'Low'],
-                    datasets: [{
-                        label: 'Vulnerabilities by Severity',
-                        data: [5, 8, 12, 15],
-                        backgroundColor: [
-                            '#e74c3c',
-                            '#f39c12',
-                            '#3498db',
-                            '#2ecc71'
-                        ]
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        }
-
-        function createSystemHealthChart() {
-            const ctx = document.getElementById('systemHealthChart');
-            if (!ctx) return;
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    datasets: [{
-                        label: 'System Health Score',
-                        data: [92, 95, 89, 85, 88, 90, 93],
-                        borderColor: '#2ecc71',
-                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 100
-                        }
-                    }
-                }
-            });
-        }
 
         function createPhishingChart() {
             const ctx = document.getElementById('phishingChart');
@@ -1129,6 +1152,8 @@
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         y: {
                             beginAtZero: true,
